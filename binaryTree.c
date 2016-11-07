@@ -140,6 +140,33 @@ void printPostOrderIteration(Node* head)
 void printPreOrderIteration(Node* head)
 {
 
+    StackNode* stackHead = (StackNode*)malloc(sizeof(StackNode));
+    stackHead = NULL;
+    pushStack(&stackHead,head);
+    int count=1;
+    while(count==1)
+    {
+       // printList(stackHead);
+        if(head!=NULL)
+        {
+            printf("%d ",head->data);
+            pushStack(&stackHead,head->rightNode);
+            pushStack(&stackHead,head->leftNode);
+            head=NULL;
+        }else
+        {
+            if(stackHead==NULL)
+            {
+                count=0;
+            }else
+            {
+                head= peekStack(&stackHead)->node;
+                popStack(&stackHead);
+                //head= head->leftNode;
+            }
+        }
+
+    }
     return;
 }
 
