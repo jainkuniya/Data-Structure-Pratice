@@ -170,6 +170,84 @@ void printPreOrderIteration(Node* head)
     return;
 }
 
+void printInLevel(Node* head)
+{
+    StackNode* stackHead = (StackNode*)malloc(sizeof(StackNode));
+    stackHead = NULL;
+    enque(&stackHead,head);
+    while(stackHead != NULL)
+    {
+        head = stackHead->node;
+         deque(&stackHead);
+        if(head!=NULL)
+        {
+            printf("%d ",head->data);
+            if(head->leftNode!=NULL)
+            {
+                enque(&stackHead,head->leftNode);
+            }
+            if(head->rightNode!=NULL)
+            {
+                enque(&stackHead,head->rightNode);
+            }
+        }
+    }
+}
+
+void enque(StackNode** head, Node* node)
+{
+    StackNode* stackNode = (StackNode*)malloc(sizeof(StackNode));
+    stackNode->nextNode = NULL;
+    stackNode->node = node;
+
+    if(*head==NULL)
+    {
+        *head = stackNode;
+        return;
+    }
+    StackNode* temp = *head;
+    while(temp->nextNode!=NULL)
+    {
+        temp=temp->nextNode;
+    }
+    temp->nextNode = stackNode;
+    return;
+}
+
+void deque(StackNode** head)
+{
+    if(*head==NULL)
+    {
+        return (*head)->node;
+    }
+    StackNode* stackNode = *head;
+    *head= (*head)->nextNode;
+   // return stackNode;
+}
+
+Node* getLastNode(StackNode** head)
+{
+    if(*head== NULL)
+    {
+        return;
+    }
+    StackNode* temp = *head;
+    StackNode* previous=NULL;
+    while(temp!=NULL)
+    {
+        previous=temp;
+        temp=temp->nextNode;
+    }
+    if(previous==NULL)
+    {
+        return *head;
+    }else
+    {
+        return previous->nextNode ;
+    }
+}
+
+
 void main()
 {
     Node* head = (Node*)malloc(sizeof(Node));
@@ -197,6 +275,10 @@ void main()
     printf("\n");
     printf("PreOrder traversal Iteration:- ");
     printPreOrderIteration(head);
+    printf("\n");
+
+    printf("InLevel traversal Iteration:- ");
+    printInLevel(head);
     printf("\n");
 
     return;
