@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include <stdlib.h>
+#include <limits.h>
 struct node {
     int data;
     struct node * leftNode;
@@ -257,6 +259,7 @@ void main()
     insert(&head,6);
     insert(&head,9);
     insert(&head,3);
+  //  insert(&head,0);
     printf("Inorder traversal :- ");
     printInorder(head);
     printf("\n");
@@ -276,6 +279,12 @@ void main()
     printf("PreOrder traversal Iteration:- ");
     printPreOrderIteration(head);
     printf("\n");
+
+    printf("InLevel traversal Iteration:- ");
+    printInLevel(head);
+    printf("\n");
+
+    deleteInBTree(&head,5);
 
     printf("InLevel traversal Iteration:- ");
     printInLevel(head);
@@ -330,9 +339,59 @@ void printInorder(Node* head)
     }
 }
 
+void deleteInBTree(Node** head, int data)
+{
+    if(*head==NULL)
+    {
+        return;
+    }
+    Node* temp = *head;
+    if(data > temp->data )
+    {
+        deleteInBTree(&(temp->rightNode),data);
+    }else if(data < temp->data )
+    {
+        deleteInBTree(&(temp->leftNode),data);
+    }else
+    {
+        if(temp->leftNode==NULL && temp->rightNode==NULL)
+        {
+            *head=NULL;
+        }else if(temp->leftNode==NULL && temp->rightNode!=NULL)
+        {
+            *head= (*head)->rightNode;
+        }else if(temp->leftNode!=NULL && temp->rightNode==NULL)
+        {
+            *head= (*head)->leftNode;
+        }else if(temp->leftNode !=NULL && temp->rightNode!=NULL)
+        {
+            int max = FindMax(temp->rightNode);
+            (*head)->data = max;
+            deleteInBTree(&(temp->rightNode),temp->data);
+        }
+    }
+}
 
-
-
+int FindMax(Node* head)
+{
+    if(head!=NULL)
+    {
+        int max1 = head->data;
+        int max2 = FindMax(head->leftNode);
+        int max3 = FindMax(head->rightNode);
+        if(max2>max1)
+        {
+            max1=max2;
+        }if(max3>max1)
+        {
+            max1=max3;
+        }
+        return max1;
+  }else
+  {
+      return INT_MIN;
+  }
+}
 
 void insert(Node** head, int data)
 {
